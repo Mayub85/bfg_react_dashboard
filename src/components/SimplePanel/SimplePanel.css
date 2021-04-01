@@ -1,0 +1,26 @@
+div.simplePanel{
+    box-shadow: 2px 2px 2px rgba(0,0,0,.8);
+    background-color: #FFF;
+    min-width: 200px;
+    min-height: 150px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+
+div.simplePanel h2{
+    padding: 5px 10px;
+    margin-bottom: 0;
+}
+
+div.simplePanel > div{
+    text-align: center;
+    color: blue;
+    /* font-size: 42px; */
+    font-weight: bold;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+div.simplePanel > div.loading {
+    font-size: 16px;
+}

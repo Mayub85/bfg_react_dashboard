@@ -1,0 +1,18 @@
+div.panel{
+    box-shadow: 2px 2px 2px rgba(0,0,0,.8);
+    background-color: #FFF;
+    min-width: 200px;
+    min-height: 150px;
+    margin: 5px;
+    border-radius: 10px;
+}
+
+div.panel h2{
+    padding: 5px 10px;
+    margin-bottom: 0;
+}
+
+div.panel p.noData{
+    color: red;
+    text-align: center;
+}
