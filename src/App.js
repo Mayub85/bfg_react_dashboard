@@ -2,17 +2,45 @@ import './App.css';
 import React from "react";
 import SimplePanel from "./components/SimplePanel/SimplePanel";
 import Panel from "./components/Panel/Panel";
+import Grid from './components/Grid/Grid';
 
 class App extends React.Component {
 
   constructor(props){
     super(props);
     this.state = {
-        ready:false,
+        ready: false,
         users: {},
         products: {},
-        pTypes: {}
+        pTypes: {},
+        showError: false,
+        errorMsg: ""
     }
+  }
+  
+  apiCall = (url, method, callback) =>{
+    let requestOptions = {
+      method: method,
+    };
+
+    fetch(url, requestOptions)
+    .then((response)=>{
+      return response.json();
+    })
+    .then((data)=>{
+      callback(data);
+    })
+    .catch(error=>{
+      this.showError(error);
+    });
+  }
+  
+  showError (error) {
+    console.log(error);
+    this.setState({
+      showError: true,
+      errorMsg: "Hubo un problema: " + error.toString()
+    });
   }
 
   getUsers = () => {
@@ -21,24 +49,19 @@ class App extends React.Component {
       users: {}
     });
 
-    let requestOptions = {
-      method: 'GET',
-    };
+   setTimeout(()=>{
 
-    fetch(`http://localhost:3000/api/users`, requestOptions)
-    .then((response)=>{
-      return response.json();
-    })
-    .then((data)=>{
-        console.log(data);
-      this.setState({
-          ready:true,
-          users: data
-        });  
-    })
-    .catch(error=>{
-        console.log(error);
-    });
+    this.apiCall("http://localhost:3000/api/users", 
+                 "GET",
+                 (data)=>{
+                  this.setState({
+                          ready:true,
+                          users: data
+                        });  
+                 });
+                },
+                 5000
+   )
   }
 
   getProducts = () => {
@@ -47,24 +70,14 @@ class App extends React.Component {
       products: {}
     });
 
-    let requestOptions = {
-      method: 'GET',
-    };
-
-    fetch(`http://localhost:3000/api/products`, requestOptions)
-    .then((response)=>{
-      return response.json();
-    })
-    .then((data)=>{
-        console.log(data);
-      this.setState({
-          ready:true,
-          products: data
-        });  
-    })
-    .catch(error=>{
-        console.log(error);
-    });
+    this.apiCall("http://localhost:3000/api/products", 
+                 "GET",
+                 (data)=>{
+                  this.setState({
+                          ready:true,
+                          products: data
+                        });  
+                 });
   }
 
   getProductTypes = () => {
@@ -73,23 +86,13 @@ class App extends React.Component {
       pTypes: {}
     });
 
-    let requestOptions = {
-      method: 'GET',
-    };
-
-    fetch(`http://localhost:3000/api/products/types`, requestOptions)
-    .then((response)=>{
-      return response.json();
-    })
-    .then((data)=>{
-        console.log(data);
-      this.setState({
-          ready:true,
-          pTypes: data
-        });  
-    })
-    .catch(error=>{
-        console.log(error);
+    this.apiCall("http://localhost:3000/api/products/types", 
+    "GET",
+    (data)=>{
+     this.setState({
+             ready:true,
+             pTypes: data
+           });  
     });
   }
 
@@ -98,38 +101,37 @@ class App extends React.Component {
     this.getProducts();
     this.getProductTypes();
   }
- 
+
   getSimplePanelUsers = ()=>{
     let {users} = this.state;
     if(users && Object.keys(users).length > 0){
-      return (<SimplePanel title="Total de usuarios" dataSize={"42px"} data={users.data.count}/>);
+      return (<SimplePanel title="Total de usuarios" dataSize={"42px"} data={users.data.count} onRefresh={this.getUsers}/>);
     } else{
-      return (<SimplePanel title="Total de usuarios" dataSize={"16px"} data={"Cargando..."}/>);
+      return (<SimplePanel title="Total de usuarios" dataSize={"16px"} data={"Cargando..."} onRefresh={this.getUsers}/>);
     }
   }
 
   getSimplePanelProducts = ()=>{
     let {products} = this.state;
     if(products && Object.keys(products).length > 0){
-      return (<SimplePanel title="Total de productos" dataSize={"42px"} data={products.data.count}/>);
+      return (<SimplePanel title="Total de productos" dataSize={"42px"} data={products.data.count} onRefresh={this.getProducts}/>);
     } else{
-      return (<SimplePanel title="Total de productos" dataSize={"16px"} data={"Cargando..."}/>);
+      return (<SimplePanel title="Total de productos" dataSize={"16px"} data={"Cargando..."} onRefresh={this.getProducts}/>);
     }
   }
 
   getSimplePanelProductTypes = ()=>{
     let {pTypes} = this.state;
     if(pTypes && Object.keys(pTypes).length > 0){
-      return (<SimplePanel title="Total tipos de producto" dataSize={"42px"} data={pTypes.data.count}/>);
+      return (<SimplePanel title="Total tipos de producto" dataSize={"42px"} data={pTypes.data.count} onRefresh={this.getProductTypes}/>);
     } else{
-      return (<SimplePanel title="Total tipos de producto" dataSize={"16px"} data={"Cargando..."}/>);
+      return (<SimplePanel title="Total tipos de producto" dataSize={"16px"} data={"Cargando..."} onRefresh={this.getProductTypes}/>);
     }
   }
 
   getPanelLastUser = ()=>{
     let {users} = this.state;
     if(users && Object.keys(users).length > 0){
-      //var max = dates.reduce(function (a, b) { return a > b ? a : b; });
       let usersArr = users.data.users;
       let lastCreatedUser = usersArr.reduce((a,b)=>{ return new Date(a.createdAt) > new Date(b.createdAt) ? a: b });
 
@@ -140,35 +142,38 @@ class App extends React.Component {
         <p><strong>Fecha creación:</strong> {this.GetFormattedDate(new Date(lastCreatedUser.createdAt))}</p>
       </div>);
 
-      return (<Panel title="Último usuario registrado" content={content}/>);
+      return (<Panel title="Último usuario registrado" content={content} onRefresh={this.getUsers}/>);
     } else{
-      return (<Panel title="Último usuario registrado" content={<p style={{textAlign:"center"}}>Cargando...</p>}/>);
+      return (<Panel title="Último usuario registrado" content={<p style={{textAlign:"center"}}>Cargando...</p>} onRefresh={this.getUsers}/>);
     }
   }
 
   getPanelLastProduct = ()=>{
     let {products} = this.state;
     if(products && Object.keys(products).length > 0){
-      //var max = dates.reduce(function (a, b) { return a > b ? a : b; });
       let productsArr = products.data.products;
       let lastCreatedProduct = productsArr.reduce((a,b)=>{ return new Date(a.createdAt) > new Date(b.createdAt) ? a: b });
 
       let content =
-      (<div style={{padding:"10px"}}>
-        <p><strong>Nombre:</strong> {lastCreatedProduct.name}</p>
-        <p><strong>Descripción:</strong> {lastCreatedProduct.ShortDescription}</p>
-        <p><strong>Precio:</strong> {lastCreatedProduct.Price}</p>
-        <p><strong>Fecha creación:</strong> {this.GetFormattedDate(new Date(lastCreatedProduct.createdAt))}</p>
-        <p><strong>Tipo de producto:</strong> {lastCreatedProduct.types.name}</p>
+      (<div style={{padding:"10px", display:"flex"}}>
+        <div>
+          <p><strong>Nombre:</strong> {lastCreatedProduct.name}</p>
+          <p><strong>Descripción:</strong> {lastCreatedProduct.ShortDescription}</p>
+          <p><strong>Precio:</strong> {lastCreatedProduct.Price}</p>
+          <p><strong>Fecha creación:</strong> {this.GetFormattedDate(new Date(lastCreatedProduct.createdAt))}</p>
+          <p><strong>Tipo de producto:</strong> {lastCreatedProduct.types.name}</p>
+        </div>
+        {(lastCreatedProduct.Images && lastCreatedProduct.Images.length > 0) &&
+          <img src={lastCreatedProduct.Images[0]} style={{height:"200px"}} alt="Producto"></img>
+        }
       </div>);
 
-      return (<Panel title="Último producto registrado" content={content}/>);
+      return (<Panel title="Último producto registrado" content={content} onRefresh={this.getProducts}/>);
     } else{
-      return (<Panel title="Último producto registrado" content={<p style={{textAlign:"center"}}>Cargando...</p>}/>);
+      return (<Panel title="Último producto registrado" content={<p style={{textAlign:"center"}}>Cargando...</p>} onRefresh={this.getProducts}/>);
     }
   }
-
-
+ 
   GetFormattedDate = (date) => {
     var month = ("0" + (date.getMonth() + 1)).slice(-2);
     var day  = ("0" + (date.getDate())).slice(-2);
@@ -178,22 +183,32 @@ class App extends React.Component {
     var seg = ("0" + (date.getSeconds())).slice(-2);
     return `${day}/${month}/${year}  ${hour}:${min}:${seg}`;
   }
-
-
-  render = () => {
-    return (
-            <main className="App">
-              <h1 className="app-title">Dashboard BFG</h1>
-              <div className="panel-group">
-                {this.getSimplePanelUsers()}
-                {this.getSimplePanelProducts()}
-                {this.getSimplePanelProductTypes()}
-                {this.getPanelLastUser()}
-                {this.getPanelLastProduct()}
-              </div>
-            </main>
-          );
+  
+    render = () => {
+      let { ready, products } = this.state;
+      return (
+              <main className="App">
+                <h1 className="app-title">
+                  <span>Dashboard BFG</span>
+                  {!ready && 
+                    <img src="/images/marioRun.gif" alt="Loading..."></img>
+                  }
+                </h1>
+                <div className="panel-group">
+                  {this.getSimplePanelUsers()}
+                  {this.getSimplePanelProducts()}
+                  {this.getSimplePanelProductTypes()}
+                  {this.getPanelLastUser()}
+                  {this.getPanelLastProduct()}
+                  <Grid data={products && Object.keys(products).length > 0 ? products.data.products : {}} title="Listado de productos" onRefresh={undefined}></Grid>
+                </div>
+              </main>
+            );
+    }
   }
-}
 
-export default App;
+  export default App;
+
+
+
+

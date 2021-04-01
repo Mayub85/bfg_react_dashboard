@@ -1,19 +1,22 @@
-import './Panel.css';
+import './GridItem.css';
 import React from "react";
 
-class Panel extends React.Component {
+class GridItem extends React.Component {
 
     render(){
-        let { title, content, onRefresh } = this.props;
+        let { title, data, onRefresh } = this.props;
         let dataContent;
-        if(content && Object.keys(content).length > 0){
-            dataContent = content;
+        if(data && Object.keys(data).length > 0){
+            
+            dataContent = data.map((val, i)=>{
+                
+            });
         } else {
             dataContent = (<p className="noData">N/A</p>);
         }
 
         return (
-            <div className="panel">
+            <div className="grid">
                 {typeof onRefresh != "undefined" &&
                     <div className="refresh"><button onClick={onRefresh}><img src="/images/refresh.svg" alt="Refresh"></img></button></div>}
                 <h2>{title}</h2>
@@ -23,4 +26,4 @@ class Panel extends React.Component {
     }
 }
 
-export default Panel;
+export default GridItem;

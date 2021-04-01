@@ -1,47 +1,46 @@
-div.panel{
+div.grid{
     box-shadow: 2px 2px 4px rgba(0,0,0,.8);
     background-color: #FFF;
-    min-width: 200px;
-    min-height: 150px;
     margin: 5px;
+    width: 100%;
     border-radius: 10px;
     align-self: start;
     position: relative;
 }
 
-div.panel div.refresh{
+div.grid div.refresh{
     position: absolute;
     right: 5px;
     top: 5px;
 }
 
-div.panel h2{
+div.grid h2{
     padding: 5px 10px;
     margin-bottom: 0;
 }
 
-div.panel p.noData{
+div.grid p.noData{
     color: red;
     text-align: center;
 }
 
-div.panel .refresh button{
+div.grid .refresh button{
     background: none;
     border: none;
     border-radius: 10px;
     outline: none;
 }
 
-div.panel .refresh button:hover{
+div.grid .refresh button:hover{
     box-shadow: 1px 1px 5px rgba(0,0,0,.8);
 }
 
-div.panel .refresh img{
+div.grid .refresh img{
     height: 15px;
 }
 
 @media (prefers-reduced-motion: no-preference) {
-    div.panel .refresh img{
+    div.grid .refresh img{
         animation: Refresh-logo-spin infinite 20s linear;
     }
 }

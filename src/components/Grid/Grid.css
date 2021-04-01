@@ -1,0 +1,117 @@
+div.grid{
+    box-shadow: 2px 2px 4px rgba(0,0,0,.8);
+    background-color: #FFF;
+    margin: 5px;
+    width: 98%;
+    border-radius: 10px;
+    align-self: start;
+    position: relative;
+}
+
+div.grid div.refresh{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
+
+div.grid h2{
+    padding: 5px 10px;
+    text-align: center;
+    margin: 0;
+    background-color: dimgray;
+    color: white;
+    border-radius: 8px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+}
+
+div.grid div.container {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+div.grid div.container div.headerContainer{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-around;
+}
+
+div.grid div.container div.headerContainer .headerCol{
+    flex: .7 0;
+    text-align: center;
+    border: solid;
+    font-weight: 900;
+}
+
+div.grid div.container div.dataContainer{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    justify-content: space-around;
+}
+
+div.grid div.container div.dataContainer .dataRow{
+    flex: 1 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: row;
+    width: 100%;
+    justify-content: space-evenly;
+    max-height: 200px;
+}
+
+div.grid div.container div.dataContainer .dataCol{
+    flex: .7 0;
+    border: solid 1px;
+    /* max-width: 100px ; */
+    word-break: break-all;
+    overflow-y: hidden;
+    max-height: 200px;
+}
+
+div.grid div.container div.dataContainer .dataCol.header{
+    text-align: center;
+    border: solid 1px;
+    background-color: dodgerblue;
+    font-weight: 900;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+div.grid p.noData{
+    color: red;
+    text-align: center;
+}
+
+div.grid .refresh button{
+    background: none;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+}
+
+div.grid .refresh button:hover{
+    box-shadow: 1px 1px 5px rgba(0,0,0,.8);
+}
+
+div.grid .refresh img{
+    height: 15px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    div.grid .refresh img{
+        animation: Refresh-logo-spin infinite 20s linear;
+    }
+}
+
+@keyframes Refresh-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+

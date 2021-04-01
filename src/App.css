@@ -7,10 +7,19 @@ body, html{
 }
 
 .App h1.app-title {
-  background-color: cadetblue;
-  color: greenyellow;
+  background-color: black;
+  color: white;
   text-align: center;
   margin: 0px;
+  position: relative;
+  border-bottom: 2px solid green;
+}
+
+.App h1.app-title img{
+  position: absolute;
+  height: 30px;
+  right: 20px;
+  top: 5px;
 }
 
 .App div.panel-group {

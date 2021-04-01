@@ -1,12 +1,19 @@
 div.simplePanel{
-    box-shadow: 2px 2px 2px rgba(0,0,0,.8);
+    box-shadow: 2px 2px 4px rgba(0,0,0,.8);
     background-color: #FFF;
     min-width: 200px;
     min-height: 150px;
     margin: 5px;
     border-radius: 10px;
+    align-self: start;
+    position: relative;
 }
 
+div.simplePanel div.refresh{
+    position: absolute;
+    right: 5px;
+    top: 5px;
+}
 
 div.simplePanel h2{
     padding: 5px 10px;
@@ -23,4 +30,34 @@ div.simplePanel > div{
 
 div.simplePanel > div.loading {
     font-size: 16px;
+}
+
+div.simplePanel .refresh button{
+    background: none;
+    border: none;
+    border-radius: 10px;
+    outline: none;
+}
+
+div.simplePanel .refresh button:hover{
+    box-shadow: 1px 1px 5px rgba(0,0,0,.8);
+}
+
+div.simplePanel .refresh img{
+    height: 15px;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    div.simplePanel .refresh img{
+        animation: Refresh-logo-spin infinite 20s linear;
+    }
+}
+
+@keyframes Refresh-logo-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
 }
