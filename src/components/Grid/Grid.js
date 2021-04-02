@@ -13,9 +13,11 @@ class Grid extends React.Component {
 
     getColumns = ()=>{
         let columns = [];
-        for (const property in this.props.data[0]) {
-            //console.log(`${property}: ${object[property]}`);
-            columns.push(property);
+        if(this.props.data){
+            for (const property in this.props.data[0]) {
+                //console.log(`${property}: ${object[property]}`);
+                columns.push(property);
+            }
         }
         return columns;
     }

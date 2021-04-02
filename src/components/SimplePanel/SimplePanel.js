@@ -4,7 +4,7 @@ import React from "react";
 class SimplePanel extends React.Component {
     render(){
         let {title, data, dataSize, onRefresh} = this.props;
-        let dataContent = (<span style={dataSize ? {fontSize: dataSize} : {fontSize:"16px"}}>{data}</span>);
+        let dataContent = (<p style={dataSize ? {fontSize: dataSize} : {fontSize:"16px"}}>{data}</p>);
         return (
             <div className="simplePanel">
                 {typeof onRefresh != "undefined" &&
