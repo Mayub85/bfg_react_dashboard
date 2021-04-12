@@ -1,0 +1,96 @@
+div.grilla{
+    width: 95%;
+    border-radius: 15px;
+    margin-bottom: 10px;
+}
+
+.grilla .p-paginator .p-paginator-current {
+    margin-left: auto;
+}
+
+.grilla .p-progressbar {
+    height: .5rem;
+    background-color: #D8DADC;
+}
+
+.grilla .p-progressbar .p-progressbar-value {
+    background-color: #607D8B;
+}
+
+.grilla .table-header {
+    display: flex;
+    justify-content: space-between;
+}
+
+.grilla .p-datepicker {
+    min-width: 25rem;
+}
+
+.grilla .p-datepicker td {
+    font-weight: 400;
+}
+
+.grilla .p-datatable .p-datatable-header {
+    padding: 1rem;
+    text-align: left;
+    font-size: 1.5rem;
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
+}
+
+.grilla .p-datatable .p-paginator {
+    padding: 1rem;
+}
+
+.grilla .p-datatable .p-datatable-thead > tr > th {
+    text-align: left;
+}
+
+.grilla .p-datatable .p-datatable-tbody > tr > td {
+    cursor: auto;
+}
+
+.grilla .p-datatable .p-dropdown-label:not(.p-placeholder) {
+    text-transform: uppercase;
+}
+
+.grilla .p-datatable-tbody > tr > td .p-column-title {
+    display: none;
+}
+
+.grilla .p-datatable-tbody > tr:hover {
+    background-color: #eef1f3;
+}
+
+@media screen and (max-width: 960px) {
+    .grilla .p-datatable .p-datatable-thead > tr > th,
+    .grilla .p-datatable .p-datatable-tfoot > tr > td {
+        display: none !important;
+    }
+
+    .grilla .p-datatable .p-datatable-tbody > tr {
+        border-bottom: 1px solid var(--layer-2);
+    }
+
+    .grilla .p-datatable .p-datatable-tbody > tr > td {
+        text-align: left;
+        display: block;
+        border: 0 none !important;
+        width: 100% !important;
+        float: left;
+        clear: left;
+        border: 0 none;
+    }
+
+    .grilla .p-datatable .p-datatable-tbody > tr > td .p-column-title {
+        padding: .4rem;
+        min-width: 30%;
+        display: inline-block;
+        margin: -.4rem 1rem -.4rem -.4rem;
+        font-weight: bold;
+    }
+
+    .grilla .p-datatable .p-datatable-tbody > tr > td .p-progressbar {
+        margin-top: .5rem;
+    }
+}

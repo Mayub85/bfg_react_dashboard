@@ -5,6 +5,7 @@ import Panel from "./components/Panel/Panel";
 import Grid from './components/Grid/Grid';
 import PopUp from './components/PopUp/PopUp';
 import {ErrorType} from './components/PopUp/PopUp';
+import Grilla from './components/Grilla/Grilla';
 
 class App extends React.Component {
 
@@ -16,7 +17,8 @@ class App extends React.Component {
         products: {},
         pTypes: {},
         showError: false,
-        errorMsg: ""
+        errorMsg: "",
+        qsColl: this.getQueryStringValues()
     }
   }
 
@@ -45,12 +47,31 @@ class App extends React.Component {
     });
   }
 
+
+  getQueryStringValues = ()=>{
+    let arr = window.location.search.slice(1, window.location.search.length).split('&');
+    return arr.map(qs=> {
+                          let splitted = qs.split("=");
+                          return {
+                                    Name: splitted[0],
+                                    Value: splitted[1]
+                                }
+                        });
+  }
+
+  getQueryStringValue = (name)=>{
+    let {qsColl} = this.state;
+    let qs = qsColl.find(qs=>qs.Name.toLowerCase() === name.toLowerCase());
+    return qs !== undefined ? qs.Value : undefined;
+  }
+
   getUsers = () => {
     this.setState({
       ready:false,
       users: {}
     });
-
+    
+    let fakeDelay = this.getQueryStringValue("delayUsers");
     setTimeout(()=>{
       this.apiCall("http://localhost:3000/api/users",
                   "GET",
@@ -61,7 +82,8 @@ class App extends React.Component {
                                     });
                     });
                   },
-                  5000)
+                  fakeDelay? fakeDelay : 0
+                  )
   }
 
   getProducts = () => {
@@ -69,15 +91,18 @@ class App extends React.Component {
       ready:false,
       products: {}
     });
-
-    this.apiCall("http://localhost:3000/api/products",
-                 "GET",
-                 (data)=>{
-                  this.setState({
-                          ready:true,
-                          products: data
-                        });
-                 });
+    let fakeDelay = this.getQueryStringValue("delayProd");
+    setTimeout(()=>{
+      this.apiCall("http://localhost:3000/api/products",
+                  "GET",
+                  (data)=>{
+                    this.setState({
+                            ready:true,
+                            products: data
+                          });
+                  });
+                },
+                fakeDelay? fakeDelay : 0);
   }
 
   getProductTypes = () => {
@@ -196,8 +221,38 @@ class App extends React.Component {
       else {
         return (<Panel title="Último producto registrado" content={<p style={{textAlign:"center", color: 'blue', fontWeight:"bolder"}}>Cargando...</p>} onRefresh={this.getProducts}/>);
       }
+    }
+  }
 
+  getPanelProductTypes = ()=>{
+    let {products, pTypes} = this.state;
+    if((products && Object.keys(products).length > 0 && typeof products.data.products != "undefined") &&
+       (pTypes && Object.keys(pTypes).length > 0 && typeof pTypes.data.types != "undefined")){
+      let productsArr = products.data.products;
+      let pTypesArr = pTypes.data.types;
+      
+      let ptWithProdCount = pTypesArr.map(pt=>{//pt.name == "CONSOLA" por ej
+        return {
+          pType: pt.name,
+          pCount: productsArr.filter(prod=> prod.types.name === pt.name).length
+        }
+      });
 
+      let content =
+      (<div style={{padding:"10px"}}>
+        {ptWithProdCount.map(ob=>{
+          return <p><strong>Tipo de producto:</strong> {ob.pType} <strong>/ Cantidad: </strong> {ob.pCount}</p>
+        })}  
+      </div>);
+
+      return (<Panel title="Tipos de productos" content={content} onRefresh={this.getProducts}/>);
+    } else{
+      if(products && Object.keys(products).length > 0 && products.meta.status === 500){
+        return (<Panel title="Tipos de productos" content={<p style={{textAlign:"center", color: 'blue', fontWeight:"bolder"}}>N/A</p>} onRefresh={this.getProducts}/>);
+      }
+      else {
+        return (<Panel title="Tipos de productos" content={<p style={{textAlign:"center", color: 'blue', fontWeight:"bolder"}}>Cargando...</p>} onRefresh={this.getProducts}/>);
+      }
     }
   }
 
@@ -229,12 +284,18 @@ class App extends React.Component {
                 }
               </h1>
               <div className="panel-group">
+              <div className="panel-group-row">
                 {this.getSimplePanelUsers()}
                 {this.getSimplePanelProducts()}
                 {this.getSimplePanelProductTypes()}
+              </div>
+              <div className="panel-group-row">
                 {this.getPanelLastUser()}
                 {this.getPanelLastProduct()}
-                <Grid data={products && Object.keys(products).length > 0 ? products.data.products : {}} title="Listado de productos" onRefresh={undefined}></Grid>
+                {this.getPanelProductTypes()}
+              </div>
+                {/* <Grid data={products && Object.keys(products).length > 0 ? products.data.products : {}} title="Listado de productos" onRefresh={undefined}></Grid> */}
+                <Grilla products={products && Object.keys(products).length > 0 ? products.data.products : []} title="Listado de productos"/>
               </div>
               {  showError &&
 

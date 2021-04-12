@@ -5,8 +5,9 @@ div.panel{
     min-height: 150px;
     margin: 5px;
     border-radius: 10px;
-    align-self: start;
+    /* align-self: start; */
     position: relative;
+    flex: 1;
 }
 
 div.panel div.refresh{

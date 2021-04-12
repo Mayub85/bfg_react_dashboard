@@ -31,6 +31,14 @@ body, html{
   height: 100%;
 }
 
+.App div.panel-group-row {
+  display: flex;
+  flex-wrap: wrap;
+  box-sizing: border-box;
+  justify-content: space-evenly;
+  align-content: center;
+  width: 95.5%;
+}
 
 /* .App-header {
   background-color: #282c34;
