@@ -6,6 +6,7 @@ import Grid from './components/Grid/Grid';
 import PopUp from './components/PopUp/PopUp';
 import {ErrorType} from './components/PopUp/PopUp';
 import Grilla from './components/Grilla/Grilla';
+require('dotenv').config();
 
 class App extends React.Component {
 
@@ -73,7 +74,7 @@ class App extends React.Component {
     
     let fakeDelay = this.getQueryStringValue("delayUsers");
     setTimeout(()=>{
-      this.apiCall("http://localhost:3000/api/users",
+      this.apiCall( `${process.env.REACT_APP_URL_API}/api/users`, //"http://localhost:3000/api/users",
                   "GET",
                   (data)=>{
                             this.setState({
@@ -93,7 +94,7 @@ class App extends React.Component {
     });
     let fakeDelay = this.getQueryStringValue("delayProd");
     setTimeout(()=>{
-      this.apiCall("http://localhost:3000/api/products",
+      this.apiCall(`${process.env.REACT_APP_URL_API}/api/products`,
                   "GET",
                   (data)=>{
                     this.setState({
@@ -111,7 +112,7 @@ class App extends React.Component {
       pTypes: {}
     });
 
-    this.apiCall("http://localhost:3000/api/products/types",
+    this.apiCall(`${process.env.REACT_APP_URL_API}/api/products/types`,
     "GET",
     (data)=>{
      this.setState({
